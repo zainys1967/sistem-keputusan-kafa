@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Uji Login API</title>
+</head>
+<body style="font-family: Arial; padding: 20px;">
+    <h2>Uji Sistem Login</h2>
+    <p>Klik butang di bawah untuk uji log masuk sebagai Admin.</p>
+    
+    <button onclick="testLogin()" style="padding: 10px 20px; background: green; color: white; border: none; cursor: pointer;">
+        Uji Login Admin
+    </button>
+    
+    <h3>Hasil Respons:</h3>
+    <pre id="output" style="background: #f4f4f4; padding: 10px; border: 1px solid #ddd;">Menunggu...</pre>
+
+    <script>
+        function testLogin() {
+            // GANTIKAN URL INI DENGAN URL APPS SCRIPT ANDA
+            var apiUrl = "https://script.google.com/macros/s/AKfycbxPTaPXaegE9C8Xvx_7X09MWw7I-bSzwEbTAVojpCi4hLDQzzAF_JnNvv0JTh-iQ3U/exec"; 
+
+            document.getElementById('output').innerText = "Sedang memproses...";
+
+            fetch(apiUrl, {
+                method: "POST",
+                // Kita guna text/plain untuk elak isu CORS di browser
+                headers: { "Content-Type": "text/plain;charset=utf-8" }, 
+                body: JSON.stringify({
+                    action: "login",
+                    username: "admin1",
+                    password: "admin123"
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('output').innerText = "Ralat: " + error;
+            });
+        }
+    </script>
+</body>
+</html>
