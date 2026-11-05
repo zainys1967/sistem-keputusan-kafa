@@ -35,7 +35,41 @@ export default function StudentView({ user, onLogout, API_URL }) {
     if (gred?.startsWith('C')) return 'bg-yellow-500';
     return 'bg-red-500';
   };
+// Fungsi untuk kongsi keputusan ke WhatsApp
+const handleShareWhatsApp = () => {
+  if (!data) return;
 
+  const { maklumatPelajar, ringkasan, keputusan } = data;
+  
+  // Bina mesej teks yang kemas
+  let mesej = `📊 *KEPUTUSAN PEPERIKSAAN*\n`;
+  mesej += `━━━━━━━━━━━━━━━━━━\n\n`;
+  mesej += `👤 *Nama:* ${maklumatPelajar.nama}\n`;
+  mesej += `🏫 *Kelas:* ${maklumatPelajar.kelas}\n`;
+  mesej += `📅 *Tahun:* 2026\n\n`;
+  mesej += `📚 *SENARAI MATA PELAJARAN:*\n\n`;
+  
+  keputusan.forEach((subjek, index) => {
+    const emojiGred = subjek.gred.startsWith('A') ? '🌟' : 
+                      subjek.gred.startsWith('B') ? '👍' : 
+                      subjek.gred.startsWith('C') ? '📝' : '⚠️';
+    mesej += `${index + 1}. ${subjek.namaSubjek}\n`;
+    mesej += `   ${emojiGred} Markah: ${subjek.markah} | Gred: ${subjek.gred}\n\n`;
+  });
+  
+  mesej += `━━━━━━━━━━━━━━━━━━\n`;
+  mesej += `📊 *PURATA MARKAH:* ${ringkasan.purataMarkah}%\n`;
+  mesej += `🎯 *PNG KESELURUHAN:* ${ringkasan.purataPNG}\n\n`;
+  mesej += `✅ *KEPUTUSAN:* ${ringkasan.purataPNG >= 2.00 ? 'LULUS' : 'GAGAL'}\n\n`;
+  mesej += `_Dijana oleh Sistem Keputusan Peperiksaan Digital_`;
+
+  // Encode mesej untuk URL
+  const mesejEncoded = encodeURIComponent(mesej);
+  
+  // Buka WhatsApp (Web atau Mobile)
+  const whatsappURL = `https://wa.me/?text=${mesejEncoded}`;
+  window.open(whatsappURL, '_blank');
+};
   return (
     <div className="min-h-screen bg-gray-100 py-6 px-4">
       {/* Header */}
@@ -122,13 +156,20 @@ export default function StudentView({ user, onLogout, API_URL }) {
               </div>
             </div>
 
-{/* Butang Cetak PDF */}
-<div className="no-print flex justify-center mt-4">
+{/* Butang Tindakan */}
+<div className="no-print flex flex-col sm:flex-row gap-3 justify-center mt-4">
   <button
     onClick={() => window.print()}
-    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition flex items-center gap-2"
+    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition flex items-center justify-center gap-2"
   >
     🖨️ Cetak / Muat Turun PDF
+  </button>
+  
+  <button
+    onClick={handleShareWhatsApp}
+    className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition flex items-center justify-center gap-2"
+  >
+    📱 Kongsi ke WhatsApp
   </button>
 </div>
 
