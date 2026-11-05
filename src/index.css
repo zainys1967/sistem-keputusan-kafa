@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* CSS Khas untuk Cetakan / PDF */
+@media print {
+  /* Sembunyikan semua elemen di body */
+  body * {
+    visibility: hidden;
+  }
+  
+  /* Hanya paparkan elemen slip keputusan */
+  #slip-keputusan, #slip-keputusan * {
+    visibility: visible;
+  }
+
+  /* Pastikan slip bermula dari tepi kertas */
+  #slip-keputusan {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+  }
+
+  /* Sembunyikan elemen dengan class 'no-print' (macam butang cetak) */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Tetapan saiz kertas A4 */
+  @page {
+    size: A4;
+    margin: 1cm;
+  }
+}

@@ -1,3 +1,4 @@
+import SlipKeputusan from './SlipKeputusan';
 import { useState, useEffect } from 'react';
 
 export default function StudentView({ user, onLogout, API_URL }) {
@@ -120,6 +121,21 @@ export default function StudentView({ user, onLogout, API_URL }) {
                 ))}
               </div>
             </div>
+
+{/* Butang Cetak PDF */}
+<div className="no-print flex justify-center mt-4">
+  <button
+    onClick={() => window.print()}
+    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition flex items-center gap-2"
+  >
+    🖨️ Cetak / Muat Turun PDF
+  </button>
+</div>
+
+{/* Komponen Slip (Tersembunyi di skrin, hanya nampak bila cetak) */}
+<div id="slip-keputusan" className="hidden print:block">
+  <SlipKeputusan data={data} />
+</div>
 
             <button
               onClick={() => { setData(null); setNoKP(''); }}
